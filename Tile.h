@@ -5,8 +5,6 @@
 #include <QObject>
 
 namespace gameInterface {
-	class ProjetJeuxEchecs;
-	class Board;
 	class Tile {
 	public:
 		Tile(int xpos, int ypos);

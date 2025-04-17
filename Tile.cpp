@@ -14,7 +14,7 @@ gameInterface::Tile::Tile(const Tile& other) : xpos_(other.xpos_), ypos_(other.y
 
 void gameInterface::Tile::movePiece(gameObjects::Piece* movePiece)
 {
-	//assert(currPiece == nullptr); // change this to a different thing
+	assert(currPiece == nullptr);
 	currPiece = movePiece;
 	currentText = currPiece->text;
 	if (currPiece->isBlack()) {
@@ -26,7 +26,6 @@ void gameInterface::Tile::movePiece(gameObjects::Piece* movePiece)
 
 void gameInterface::Tile::removePiece()
 {
-	//assert(currPiece != nullptr);
 	currPiece = nullptr;
 	currentText = (QString)"";
 	currentTextValid = currentText;
@@ -49,7 +48,6 @@ bool gameInterface::Tile::isRoi()
 
 void gameInterface::Tile::addValid()
 {
-	//assert(valid_ == false);
 	valid_ = true;
 
 	currentTextValid = currentText + (QString)"(V)";
@@ -57,7 +55,6 @@ void gameInterface::Tile::addValid()
 
 void gameInterface::Tile::removeValid()
 {
-	//assert(valid_ == true);
 	valid_ = false;
 	currentTextValid = currentText;
 }

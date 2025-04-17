@@ -1,3 +1,4 @@
+
 #include "Board.h"
 #include "Roi.h"
 #include "Chevalier.h"
@@ -86,6 +87,7 @@ void gameInterface::Board::resetAttributes(bool defaultreset)
 				tiles[i][j]->removePiece();
 				delete todelete;
 			}
+			tiles[i][j]->removeValid();
 		}
 	}
 	if (defaultreset) {
@@ -102,13 +104,13 @@ std::vector<std::pair<int, QString>> gameInterface::Board::updateBoard(int x, in
 			if (tiles[x][y]->piece() != nullptr) {
 				gameObjects::Piece* todelete = tiles[x][y]->piece();
 				tiles[x][y]->removePiece();
-				delete todelete; //DELETING PIECES (CAN ADD TODELETE TO A LIST FOR)
 				if (todelete->isBlack()) {
 					blackPieces.erase(std::pair<int, int>(x, y));
 				}
 				else {
 					whitePieces.erase(std::pair<int, int>(x, y));
 				}
+				delete todelete; //DELETING PIECES (CAN ADD TODELETE TO A LIST FOR)
 			}
 			tiles[x][y]->movePiece(tiles[movingPos.first][movingPos.second]->piece());
 			tiles[movingPos.first][movingPos.second]->removePiece();
