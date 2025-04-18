@@ -10,11 +10,13 @@ namespace gameInterface {
 		~Board();
 		Board(const Board& other);
 
+		void displayPiece(int x, int y, gameObjects::Piece* piece);
 		QString displayTurn() const;
 		void resetAttributes(bool defaultreset);
 		std::vector<std::pair<int,QString>> updateBoard(int x, int y);
 		std::vector<std::pair<int, QString>> updateBoard();
 		std::vector<std::pair<int, QString>> addPiece(int x, int y, gameObjects::Piece* piece);
+		gameObjects::Piece* stealPiece(int x, int y);
 		QString checkCheck() const;
 		bool ismoving() const;
 	private:

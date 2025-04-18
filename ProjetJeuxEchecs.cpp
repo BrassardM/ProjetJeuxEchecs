@@ -3,14 +3,16 @@
 #include "Chevalier.h"
 #include "Fou.h"
 #include <QMessageBox>
-#include "Tempboard.h"
+#include "TempMove.h"
 
 gameInterface::ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ProjetJeuxEchecsClass())
 {
+    Board* pboard = new Board;
+    board = pboard;
     ui->setupUi(this);
-    ui->turn->setText((QString)"White's Turn");
+    ui->turn->setText((QString)"Tour des blancs");
     for (int y{}; y < 8; y++) {
         for (int x{}; x < 8; x++){
             QPushButton* currbutton = findChild<QPushButton*>((QString)((char)(72-x)) + (QString)'_' + (QString)QString::number(y+1));
@@ -26,34 +28,42 @@ gameInterface::ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget *parent)
     connect(ui->addFou, &QPushButton::clicked, this, [&] { addFou(); });
     connect(ui->addChev, &QPushButton::clicked, this, [&] { addChev(); });
     connect(ui->adddel, &QPushButton::clicked, this, [&] { addDelete(); });
+    connect(ui->reinit, &QPushButton::clicked, this, [&] { reinit(); });
 
 
-    std::vector<std::pair<int, QString>> thingsToDraw = board.updateBoard();
+    std::vector<std::pair<int, QString>> thingsToDraw = board->updateBoard();
     drawBoard(thingsToDraw);
 }
 void gameInterface::ProjetJeuxEchecs::onClick(int x, int y) {
     if (!(ui->creativeMode->isChecked())) {
-        if (ui->testmove->isChecked() && board.ismoving() == true) {
-            drawBoard(board.updateBoard());
-            tempmove(x,y);
+        if (ui->testmove->isChecked() && isTempMoving) {
+            tempmove(tempMovingPos, std::pair<int, int>(x, y));
+            ui->testmove->setChecked(false);
+            isTempMoving = false;
+        }
+        else if (ui->testmove->isChecked() && !isTempMoving) {
+            tempMovingPos = std::pair<int,int>(x, y);
+            drawBoard(board->updateBoard());
+            isTempMoving = true;
         }
         else {
-            std::vector<std::pair<int, QString>> thingsToDraw = board.updateBoard(x, y);
+            std::vector<std::pair<int, QString>> thingsToDraw = board->updateBoard(x, y);
             drawBoard(thingsToDraw);
         }
-        ui->turn->setText(board.displayTurn());
-        ui->check->setText(board.checkCheck());
+        ui->turn->setText(board->displayTurn());
+        ui->check->setText(board->checkCheck());
     }
     else {
         ui->testmove->setChecked(false);
-        drawBoard(board.addPiece(x,y,pieceSelection)); //also removes piece
+        drawBoard(board->addPiece(x,y,pieceSelection)); //also removes piece
         pieceSelection = nullptr;
-        ui->currentselection->setText("Current Selection");
+        ui->currentselection->setText("Effacer");
     }
 }
 
 gameInterface::ProjetJeuxEchecs::~ProjetJeuxEchecs()
 {
+    delete board;
     delete pieceSelection;
     delete ui;
 }
@@ -65,33 +75,34 @@ void gameInterface::ProjetJeuxEchecs::drawBoard(std::vector<std::pair<int, QStri
     }
 }
 
-void gameInterface::ProjetJeuxEchecs::tempmove(int x, int y) const
+void gameInterface::ProjetJeuxEchecs::tempmove(std::pair<int,int> originalPos, std::pair<int,int> movePos) const
 {
-    TempBoard tempboard(board);
-    std::vector<std::pair<int, QString>> thingsToDraw = (*tempboard)->updateBoard(x, y);
-    drawBoard(thingsToDraw);
+    TempMove tm(originalPos,movePos,board);
+    drawBoard(board->updateBoard());
 }
 
 void gameInterface::ProjetJeuxEchecs::cancelPieceSelection()
 {
     if (pieceSelection != nullptr) {
         delete pieceSelection;
-        ui->currentselection->setText((QString)"Current Selection");
+        ui->currentselection->setText((QString)"Effacer");
         pieceSelection = nullptr;
     }
 }
 
 void gameInterface::ProjetJeuxEchecs::resetBoard(bool defaultreset)
 {
-    board.resetAttributes(defaultreset);
-    drawBoard(board.updateBoard());
-    ui->check->setText(board.checkCheck());
+    board->resetAttributes(defaultreset);
+    drawBoard(board->updateBoard());
+    ui->turn->setText("Tour des blancs");
+    ui->check->setText(board->checkCheck());
 }
 
 void gameInterface::ProjetJeuxEchecs::goBackToMain()
 {
-    drawBoard(board.updateBoard());
-    ui->check->setText(board.checkCheck());
+    isTempMoving = false;
+    drawBoard(board->updateBoard());
+    ui->check->setText(board->checkCheck());
 
 }
 
@@ -109,9 +120,9 @@ void gameInterface::ProjetJeuxEchecs::addRoi()
             ui->currentselection->setText(text);
         }
     }
-    catch (tooManyKings& e){
+    catch (errors::tooManyKings& e){
         QMessageBox messagebox;
-        messagebox.critical(0, "Cannot add more than 2 kings!", e.what());
+        messagebox.critical(0, "Trop de Rois", e.what());
     }
 }
 
@@ -122,7 +133,7 @@ void gameInterface::ProjetJeuxEchecs::addFou()
         pieceSelection = fouajout;
         QString text = (QString)"Fou";
         if (ui->black->isChecked()) {
-            text = text + (QString)" Black";
+            text = text + (QString)" Noir";
         }
         ui->currentselection->setText(text);
     }
@@ -135,7 +146,7 @@ void gameInterface::ProjetJeuxEchecs::addChev()
         pieceSelection = Chevajout;
         QString text = (QString)"Chevalier";
         if (ui->black->isChecked()) {
-            text = text + (QString)" Black";
+            text = text + (QString)" Noir";
         }
         ui->currentselection->setText(text);
     }
@@ -145,7 +156,12 @@ void gameInterface::ProjetJeuxEchecs::addDelete()
 {
     if (ui->creativeMode->isChecked()) {
         pieceSelection = nullptr;
-        QString text = (QString)"Current Selection";
+        QString text = (QString)"Effacer";
         ui->currentselection->setText(text);
     }
+}
+
+void gameInterface::ProjetJeuxEchecs::reinit()
+{
+    drawBoard(board->updateBoard());
 }

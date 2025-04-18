@@ -21,11 +21,13 @@ namespace gameInterface {
         void cancelPieceSelection();
         QPushButton* pushButtonCoords[8][8];
         Ui::ProjetJeuxEchecsClass* ui;
-        Board board;
+        Board* board;
         bool creativemode = false;
         gameObjects::Piece* pieceSelection = nullptr;
         void drawBoard(std::vector<std::pair<int, QString>> thingsToDraw) const;
-        void tempmove(int x, int y) const;
+        void tempmove(std::pair<int, int> originalPos, std::pair<int, int> movePos) const;
+        bool isTempMoving = false;
+        std::pair<int, int> tempMovingPos = { 0,0 };
     
     private slots:
         void onClick(int x, int y);
@@ -35,5 +37,6 @@ namespace gameInterface {
         void addFou();
         void addChev();
         void addDelete();
+        void reinit();
     };
 }

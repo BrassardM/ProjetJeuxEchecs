@@ -1,5 +1,4 @@
 #include "Roi.h"
-#include <cassert>
 
 using namespace gameObjects;
 gameObjects::Roi::Roi(bool isBlack, bool isTemp) : Piece(std::vector<std::pair<int, int>>{
@@ -21,7 +20,7 @@ gameObjects::Roi::Roi(bool isBlack, bool isTemp) : Piece(std::vector<std::pair<i
 		nRois++;
 		if (nRois > 2) {
 			nRois--;
-			throw tooManyKings("too many kings");
+			throw errors::tooManyKings("Plus de 2 rois!");
 		} //change error to affect GUI
 	}
 }

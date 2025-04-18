@@ -18,7 +18,7 @@ void gameInterface::Tile::movePiece(gameObjects::Piece* movePiece)
 	currPiece = movePiece;
 	currentText = currPiece->text;
 	if (currPiece->isBlack()) {
-		currentText += (QString)" Bl";
+		currentText += (QString)" N";
 	}
 	currentTextValid = currentText;
 	currPiece->movePos(xpos_, ypos_);
@@ -28,7 +28,12 @@ void gameInterface::Tile::removePiece()
 {
 	currPiece = nullptr;
 	currentText = (QString)"";
-	currentTextValid = currentText;
+	if (valid_) {
+		currentTextValid = currentText + (QString)"[V]";
+	}
+	else {
+		currentTextValid = currentText;
+	}
 }
 
 gameObjects::Piece* gameInterface::Tile::piece()
@@ -50,7 +55,7 @@ void gameInterface::Tile::addValid()
 {
 	valid_ = true;
 
-	currentTextValid = currentText + (QString)"(V)";
+	currentTextValid = currentText + (QString)"[V]";
 }
 
 void gameInterface::Tile::removeValid()

@@ -1468,7 +1468,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Creative Mode</string>
+     <string>Mode creatif</string>
     </property>
    </widget>
    <widget class="QPushButton" name="gobacktodefault">
@@ -1481,7 +1481,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Default Reset</string>
+     <string>Reset simple</string>
     </property>
    </widget>
    <widget class="QLabel" name="turn">
@@ -1507,7 +1507,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>No one in check</string>
+     <string>Pas d'echec</string>
     </property>
    </widget>
    <widget class="QPushButton" name="addRoi">
@@ -1559,7 +1559,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Black</string>
+     <string>Noir</string>
     </property>
    </widget>
    <widget class="QPushButton" name="emptyreset">
@@ -1572,7 +1572,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Empty Reset</string>
+     <string>Reset vide</string>
     </property>
    </widget>
    <widget class="QLabel" name="currentselection">
@@ -1585,7 +1585,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Current Selection</string>
+     <string>Effacer</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="testmove">
@@ -1593,12 +1593,12 @@
      <rect>
       <x>10</x>
       <y>210</y>
-      <width>81</width>
+      <width>91</width>
       <height>18</height>
      </rect>
     </property>
     <property name="text">
-     <string>Test Move</string>
+     <string>Move test</string>
     </property>
    </widget>
    <widget class="QPushButton" name="adddel">
@@ -1611,7 +1611,20 @@
      </rect>
     </property>
     <property name="text">
-     <string>Delete</string>
+     <string>Effacer</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="reinit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>190</y>
+      <width>80</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reinitializer</string>
     </property>
    </widget>
   </widget>

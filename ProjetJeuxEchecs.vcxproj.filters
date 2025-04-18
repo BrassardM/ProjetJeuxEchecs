@@ -73,7 +73,7 @@
     <ClCompile Include="Board.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TempBoard.cpp">
+    <ClCompile Include="TempMove.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -99,7 +99,7 @@
     <ClInclude Include="tooManyKings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TempBoard.h">
+    <ClInclude Include="TempMove.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

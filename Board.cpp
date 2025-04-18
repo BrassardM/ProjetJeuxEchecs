@@ -58,10 +58,10 @@ QString gameInterface::Board::displayTurn() const
 {
 	QString out;
 	if (isBlackTurn) {
-		out = (QString)"Black's Turn";
+		out = (QString)"Tour des noirs";
 	}
 	else {
-		out = (QString)"White's Turn";
+		out = (QString)"Tour des blancs";
 	}
 	return out;
 }
@@ -170,6 +170,12 @@ std::vector<std::pair<int, QString>> gameInterface::Board::updateBoard()
 	return outVect;
 }
 
+void gameInterface::Board::displayPiece(int x, int y, gameObjects::Piece* piece) {
+	if (piece != nullptr) {
+		tiles[x][y]->movePiece(piece);
+	}
+}
+
 std::vector<std::pair<int, QString>> gameInterface::Board::addPiece(int x, int y, gameObjects::Piece* piece)
 {
 	std::vector<std::pair<int, QString>> outVect;
@@ -203,16 +209,24 @@ std::vector<std::pair<int, QString>> gameInterface::Board::addPiece(int x, int y
 	return outVect;
 }
 
+gameObjects::Piece* gameInterface::Board::stealPiece(int x, int y)
+{
+	gameObjects::Piece* outpiece = tiles[x][y]->piece();
+	tiles[x][y]->removePiece();
+	
+	return outpiece;
+}
+
 QString gameInterface::Board::checkCheck() const
 {
-	QString out = (QString)"check";
+	QString out = (QString)"echec";
 	bool found = false;
 	if (isBlackTurn) {
 		for (auto&& n : whitePieces) {
 			auto validMoves = checkValidMoves(n.first, n.second, false);
 			for (auto m : validMoves) {
 				if (m == blackKingPos) {
-					out = (QString)"Black in " + out;
+					out = (QString)"Noir en " + out;
 					found = true;
 					break;
 				}
@@ -227,7 +241,7 @@ QString gameInterface::Board::checkCheck() const
 			auto validMoves = checkValidMoves(n.first, n.second, true);
 			for (auto m : validMoves) {
 				if (m == whiteKingPos) {
-					out = (QString)"White in " + out;
+					out = (QString)"Blanc en " + out;
 					found = true;
 					break;
 				}
@@ -238,7 +252,7 @@ QString gameInterface::Board::checkCheck() const
 		}
 	}
 	if (!found) {
-		out = (QString)"No one in " + out;
+		out = (QString)"Pas d'" + out;
 	}
 	return out;
 }
