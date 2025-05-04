@@ -3,7 +3,7 @@
 #include <set>
 
 #pragma once
-namespace gameInterface {
+namespace gameObjects {
 	class Board{
 	public:
 		Board();
@@ -11,17 +11,21 @@ namespace gameInterface {
 		Board(const Board& other);
 
 		void displayPiece(int x, int y, gameObjects::Piece* piece);
-		QString displayTurn() const;
+		bool getBlackTurn() const;
 		void resetAttributes(bool defaultreset);
-		std::vector<std::pair<int,QString>> updateBoard(int x, int y);
-		std::vector<std::pair<int, QString>> updateBoard();
-		std::vector<std::pair<int, QString>> addPiece(int x, int y, gameObjects::Piece* piece);
+		void updateBoard(int x, int y);
+		void addPiece(int x, int y, gameObjects::Piece* piece);
 		gameObjects::Piece* stealPiece(int x, int y);
-		QString checkCheck() const;
+		bool checkCheck(bool blackTurn) const;
 		bool ismoving() const;
+		std::vector<std::pair<int, QString>> operator*();
+		bool checkStalemate();
+		bool checkCheckmate();
+
 	private:
 		std::vector<std::pair<int, int>> checkValidMoves(int x, int y, bool blackTurnLocal) const;
 		void initDefaultBoard();
+		bool miseEnEchec(int x, int y, std::pair<int, int> validMove);
 		Tile* tiles[8][8];
 		bool pieceMoving = false;
 		std::pair<int,int> movingPos;

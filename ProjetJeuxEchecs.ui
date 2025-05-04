@@ -1552,10 +1552,10 @@
    <widget class="QCheckBox" name="black">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>140</y>
-      <width>81</width>
-      <height>18</height>
+      <x>590</x>
+      <y>190</y>
+      <width>41</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -1579,7 +1579,7 @@
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>170</y>
+      <y>240</y>
       <width>91</width>
       <height>21</height>
      </rect>
@@ -1604,8 +1604,8 @@
    <widget class="QPushButton" name="adddel">
     <property name="geometry">
      <rect>
-      <x>590</x>
-      <y>90</y>
+      <x>540</x>
+      <y>190</y>
       <width>41</width>
       <height>41</height>
      </rect>
@@ -1625,6 +1625,45 @@
     </property>
     <property name="text">
      <string>Reinitializer</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addTour">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>140</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Tour</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addPion">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>140</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pion</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addReine">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>90</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Rein</string>
     </property>
    </widget>
   </widget>

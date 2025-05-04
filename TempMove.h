@@ -3,7 +3,7 @@
 
 //RAII
 
-namespace gameInterface {
+namespace gameObjects {
 	class TempMove {
 	public:
 		TempMove(std::pair<int, int> originalPos, std::pair<int, int> stealpos, Board* input);

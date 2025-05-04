@@ -17,6 +17,21 @@ void Piece::movePos(int x, int y) {
 	pos_ = { x, y };
 }
 
+void gameObjects::Piece::playerMove()
+{
+	hasMoved = true;
+}
+
+void gameObjects::Piece::removePossMoves(int i)
+{
+	movesPattern_.erase(movesPattern_.begin() + i);
+}
+
+bool gameObjects::Piece::getHasMoved() const
+{
+	return hasMoved;
+}
+
 bool gameObjects::Piece::isBlack()
 {
 	return isBlack_;

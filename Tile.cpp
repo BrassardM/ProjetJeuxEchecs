@@ -3,16 +3,18 @@
 #include "Fou.h"
 #include "Chevalier.h"
 
-gameInterface::Tile::Tile(int xpos, int ypos) : xpos_(xpos), ypos_(ypos), currPiece(nullptr), currentText((QString)""), currentTextValid((QString)"")
+using namespace gameObjects;
+
+Tile::Tile(int xpos, int ypos) : xpos_(xpos), ypos_(ypos), currPiece(nullptr), currentText((QString)""), currentTextValid((QString)"")
 {
 	
 }
 
-gameInterface::Tile::Tile(const Tile& other) : xpos_(other.xpos_), ypos_(other.ypos_), currPiece(nullptr), currentText(other.currentText), currentTextValid(other.currentTextValid), valid_(other.valid_)
+Tile::Tile(const Tile& other) : xpos_(other.xpos_), ypos_(other.ypos_), currPiece(nullptr), currentText(other.currentText), currentTextValid(other.currentTextValid), valid_(other.valid_)
 {
 }
 
-void gameInterface::Tile::movePiece(gameObjects::Piece* movePiece)
+void Tile::movePiece(gameObjects::Piece* movePiece)
 {
 	assert(currPiece == nullptr);
 	currPiece = movePiece;
@@ -24,7 +26,7 @@ void gameInterface::Tile::movePiece(gameObjects::Piece* movePiece)
 	currPiece->movePos(xpos_, ypos_);
 }
 
-void gameInterface::Tile::removePiece()
+void Tile::removePiece()
 {
 	currPiece = nullptr;
 	currentText = (QString)"";
@@ -36,12 +38,12 @@ void gameInterface::Tile::removePiece()
 	}
 }
 
-gameObjects::Piece* gameInterface::Tile::piece()
+gameObjects::Piece* Tile::piece()
 {
 	return currPiece;
 }
 
-bool gameInterface::Tile::isRoi()
+bool Tile::isRoi()
 {
 	if (dynamic_cast<gameObjects::Roi*>(piece()) != NULL) {
 		return true;
@@ -51,25 +53,25 @@ bool gameInterface::Tile::isRoi()
 	}
 }
 
-void gameInterface::Tile::addValid()
+void Tile::addValid()
 {
 	valid_ = true;
 
 	currentTextValid = currentText + (QString)"[V]";
 }
 
-void gameInterface::Tile::removeValid()
+void Tile::removeValid()
 {
 	valid_ = false;
 	currentTextValid = currentText;
 }
 
-bool gameInterface::Tile::isValidMove() const
+bool Tile::isValidMove() const
 {
 	return valid_;
 }
 
-QString gameInterface::Tile::operator*() const
+QString Tile::operator*() const
 {
 	return currentTextValid;
 }

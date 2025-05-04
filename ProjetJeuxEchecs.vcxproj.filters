@@ -76,6 +76,15 @@
     <ClCompile Include="TempMove.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Reine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tour.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Piece.h">
@@ -100,6 +109,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TempMove.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Reine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,10 +1,8 @@
 #pragma once
 #include <utility>
-#include <QPushButton>
 #include "Piece.h"
-#include <QObject>
 
-namespace gameInterface {
+namespace gameObjects {
 	class Tile {
 	public:
 		Tile(int xpos, int ypos);
