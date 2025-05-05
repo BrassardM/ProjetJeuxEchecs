@@ -1666,6 +1666,58 @@
      <string>Rein</string>
     </property>
    </widget>
+   <widget class="QLabel" name="blackProm">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>360</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reine</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="whiteProm">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>300</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reine</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="staticLabelWhiteProm">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>280</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Promotion Blanc</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="staticLabelBlackProm">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>340</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Promotion Noir</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

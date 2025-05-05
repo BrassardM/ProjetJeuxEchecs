@@ -1,4 +1,3 @@
-
 #include "Board.h"
 #include "Roi.h"
 #include "Chevalier.h"
@@ -20,6 +19,7 @@ Board::Board()
 	}
 	//default reset
 	initDefaultBoard();
+	logBoardState();
 }
 
 Board::~Board()
@@ -29,6 +29,9 @@ Board::~Board()
 			delete tiles[i][j]->piece();
 			delete tiles[i][j];
 		}
+	}
+	for (auto&& n : boardStateLog) {
+		delete n;
 	}
 }
 
@@ -70,11 +73,18 @@ void Board::resetAttributes(bool defaultreset)
 	pieceMoving = false;
 	isBlackTurn = false;
 	validMovingPosList = {};
-	blackKingPos = {};
-	whiteKingPos = {};
+	blackKingPos = {-1,-1};
+	whiteKingPos = {-1,-1};
+	nextEnPassant = { -1,-1 };
 	blackPieces = {};
 	whitePieces = {};
+	gameover = false;
+	sincelasttaken = 0;
 
+	for (auto&& n : boardStateLog) {
+		delete n;
+	}
+	boardStateLog = {};
 
 	for (int i{}; i < 8; i++) {
 		for (int j{}; j < 8; j++) {
@@ -89,65 +99,123 @@ void Board::resetAttributes(bool defaultreset)
 	if (defaultreset) {
 		initDefaultBoard();
 	}
+	logBoardState();
 }
-
 
 void Board::updateBoard(int x, int y)
 {
-	if (pieceMoving == true) {
-		if (tiles[x][y]->isValidMove()) {
-			if (tiles[x][y]->piece() != nullptr) {
-				gameObjects::Piece* todelete = tiles[x][y]->piece();
-				tiles[x][y]->removePiece();
-				if (todelete->isBlack()) {
-					blackPieces.erase(std::pair<int, int>(x, y));
+	if (!gameover){
+		if (pieceMoving == true) {
+			if (tiles[x][y]->isValidMove()) {
+				if (tiles[x][y]->piece() != nullptr) {
+					sincelasttaken = -1;
+					gameObjects::Piece* todelete = tiles[x][y]->piece();
+					tiles[x][y]->removePiece();
+					if (todelete->isBlack()) {
+						blackPieces.erase(std::pair<int, int>(x, y));
+					}
+					else {
+						whitePieces.erase(std::pair<int, int>(x, y));
+					}
+					delete todelete; //DELETING PIECES
 				}
-				else {
-					whitePieces.erase(std::pair<int, int>(x, y));
+				// en passant
+				else if ((dynamic_cast<Pion*>(tiles[movingPos.first][movingPos.second]->piece()) != NULL) && (abs(movingPos.first - x) - abs(movingPos.second - y) == 0)){
+					sincelasttaken = -1;
+					gameObjects::Piece* todelete = tiles[x- (1 - 2 * isBlackTurn)][y]->piece();
+					tiles[x- (1 - 2 * isBlackTurn)][y]->removePiece();
+					if (todelete->isBlack()) {
+						blackPieces.erase(std::pair<int, int>(x- (1 - 2 * isBlackTurn), y));
+					}
+					else {
+						whitePieces.erase(std::pair<int, int>(x- (1 - 2 * isBlackTurn), y));
+					}
+					delete todelete; //DELETING PIECES
 				}
-				delete todelete; //DELETING PIECES (CAN ADD TODELETE TO A LIST FOR)
-			}
-			tiles[x][y]->movePiece(tiles[movingPos.first][movingPos.second]->piece());
-			tiles[movingPos.first][movingPos.second]->removePiece();
-			if (tiles[x][y]->piece()->isBlack()) {
-				blackPieces.erase(std::pair<int, int>(movingPos.first, movingPos.second));
-				blackPieces.insert(std::pair<int, int>(x, y));
-				if (tiles[x][y]->isRoi()) {
-					blackKingPos = std::pair<int, int>{ x,y };
-				}
-			}
-			else {
-				whitePieces.erase(std::pair<int, int>(movingPos.first, movingPos.second));
-				whitePieces.insert(std::pair<int, int>(x, y));
-				if (tiles[x][y]->isRoi()) {
-					whiteKingPos = std::pair<int, int>{ x,y };
-				}
-			}
-			isBlackTurn = not(isBlackTurn);
-			tiles[x][y]->piece()->playerMove();
-		}
-		
-		for (auto&& n : validMovingPosList) {
-			tiles[n.first][n.second]->removeValid();
-		}
-		pieceMoving = false;
-	}
-	else {
-		if (tiles[x][y]->piece() != nullptr) {
-			if ((tiles[x][y]->piece()->isBlack() == isBlackTurn)) {
-				std::vector<std::pair<int, int>> validBeforeCheck = checkValidMoves(x,y,isBlackTurn);
-				std::vector<std::pair<int, int>> newValidMoves;
-
-				for (auto&& n : validBeforeCheck) {
-					if (miseEnEchec(x, y, n) == false) {
-						newValidMoves.push_back(n);
-						tiles[n.first][n.second]->addValid();
+				tiles[x][y]->movePiece(tiles[movingPos.first][movingPos.second]->piece());
+				tiles[movingPos.first][movingPos.second]->removePiece();
+				if (tiles[x][y]->piece()->isBlack()) {
+					blackPieces.erase(std::pair<int, int>(movingPos.first, movingPos.second));
+					blackPieces.insert(std::pair<int, int>(x, y));
+					if (tiles[x][y]->isRoi()) {
+						blackKingPos = std::pair<int, int>{ x,y };
 					}
 				}
-				if (!(newValidMoves.empty())) {
-					pieceMoving = true;
-					validMovingPosList = move(newValidMoves);
-					movingPos = std::pair<int, int>(x, y);
+				else {
+					whitePieces.erase(std::pair<int, int>(movingPos.first, movingPos.second));
+					whitePieces.insert(std::pair<int, int>(x, y));
+					if (tiles[x][y]->isRoi()) {
+						whiteKingPos = std::pair<int, int>{ x,y };
+					}
+				}
+
+				//castling
+				if ((movingPos.second - y == -2) && dynamic_cast<Roi*>(tiles[x][y]->piece()) != NULL) {
+					tiles[x][y - 1]->movePiece(tiles[x][y + 1]->piece());
+					tiles[x][y + 1]->removePiece();
+					if (isBlackTurn) {
+						blackPieces.erase(std::pair<int, int>{x, y + 1});
+						blackPieces.insert(std::pair<int, int>{x, y - 1});
+					}
+					else {
+						whitePieces.erase(std::pair<int, int>{x, y + 1});
+						whitePieces.insert(std::pair<int, int>{x, y - 1});
+					}
+				}
+				else if ((movingPos.second - y == 2) && dynamic_cast<Roi*>(tiles[x][y]->piece()) != NULL) {
+					tiles[x][y + 1]->movePiece(tiles[x][y - 2]->piece());
+					tiles[x][y - 2]->removePiece();
+					if (isBlackTurn) {
+						blackPieces.erase(std::pair<int, int>{x, y - 2});
+						blackPieces.insert(std::pair<int, int>{x, y + 1});
+					}
+					else {
+						whitePieces.erase(std::pair<int, int>{x, y - 2});
+						whitePieces.insert(std::pair<int, int>{x, y + 1});
+					}
+				}
+ 
+				//promoting
+				if ((x == 7 || x == 0) && dynamic_cast<Pion*>(tiles[x][y]->piece()) != NULL) {
+					promote(x, y);
+				}
+				//next en passant
+				if (dynamic_cast<Pion*>(tiles[x][y]->piece()) != NULL && (abs(movingPos.first - x) == 2)) {
+					nextEnPassant = std::pair<int, int>{movingPos.first + (1-2*isBlackTurn),y};
+				}
+				else {
+					nextEnPassant = std::pair<int, int>{ -1,-1 };
+				}
+				
+				isBlackTurn = not(isBlackTurn);
+				tiles[x][y]->piece()->playerMove();
+				sincelasttaken++;
+				logBoardState();
+				checkGame();
+			}
+
+			for (auto&& n : validMovingPosList) {
+				tiles[n.first][n.second]->removeValid();
+			}
+			pieceMoving = false;
+		}
+		else {
+			if (tiles[x][y]->piece() != nullptr) {
+				if ((tiles[x][y]->piece()->isBlack() == isBlackTurn)) {
+					std::vector<std::pair<int, int>> validBeforeCheck = checkValidMoves(x, y, isBlackTurn, true);
+					std::vector<std::pair<int, int>> newValidMoves;
+
+					for (auto&& n : validBeforeCheck) {
+						if (miseEnEchec(x, y, n) == false) {
+							newValidMoves.push_back(n);
+							tiles[n.first][n.second]->addValid();
+						}
+					}
+					if (!(newValidMoves.empty())) {
+						pieceMoving = true;
+						validMovingPosList = move(newValidMoves);
+						movingPos = std::pair<int, int>(x, y);
+					}
 				}
 			}
 		}
@@ -248,55 +316,64 @@ std::vector<std::pair<int, QString>> gameObjects::Board::operator*()
 	return outVect;
 }
 
-bool gameObjects::Board::checkStalemate()
+bool gameObjects::Board::getState() const {
+	return gameover;
+};
+
+void gameObjects::Board::checkGame()
 {
-	bool stalemate = true;
-	if (checkCheck(isBlackTurn) == false) {
-		if (isBlackTurn) {
-			for (auto&& n : blackPieces) {
-				auto validMoves = checkValidMoves(n.first, n.second, isBlackTurn);
-				for (auto&& m : validMoves) {
-					stalemate = stalemate && miseEnEchec(n.first, n.second, m);
-				}
-			}
-		}
-		else {
-			for (auto&& n : whitePieces) {
-				auto validMoves = checkValidMoves(n.first, n.second, isBlackTurn);
-				for (auto&& m : validMoves) {
-					stalemate = stalemate && miseEnEchec(n.first, n.second, m);
+	gameover = true;
+
+	if (blackKingPos != std::pair<int,int>{-1,-1} || whiteKingPos != std::pair<int, int>{-1, -1}) {
+		if (!threeSameStates()) {
+			if (whitePieces.size() > 1 && blackPieces.size() > 1) {
+				if (sincelasttaken < 100) { //50 move rule
+					if (isBlackTurn) {
+						for (auto&& n : blackPieces) {
+							auto validMoves = checkValidMoves(n.first, n.second, isBlackTurn);
+							for (auto&& m : validMoves) {
+								gameover = gameover && miseEnEchec(n.first, n.second, m);
+							}
+						}
+					}
+					else {
+						for (auto&& n : whitePieces) {
+							auto validMoves = checkValidMoves(n.first, n.second, isBlackTurn);
+							for (auto&& m : validMoves) {
+								gameover = gameover && miseEnEchec(n.first, n.second, m);
+							}
+						}
+					}
 				}
 			}
 		}
 	}
-	return stalemate;
 }
 
-bool gameObjects::Board::checkCheckmate()
+void gameObjects::Board::logBoardState()
 {
-	bool checkmate = true;
-	if (checkCheck(isBlackTurn) == true) {
-		if (isBlackTurn) {
-			for (auto&& n : blackPieces) {
-				auto validMoves = checkValidMoves(n.first, n.second, isBlackTurn);
-				for (auto&& m : validMoves) {
-					checkmate = checkmate && miseEnEchec(n.first, n.second, m);
-				}
-			}
-		}
-		else {
-			for (auto&& n : whitePieces) {
-				auto validMoves = checkValidMoves(n.first, n.second, isBlackTurn);
-				for (auto&& m : validMoves) {
-					checkmate = checkmate && miseEnEchec(n.first, n.second, m);
-				}
-			}
-		}
+	std::set<std::tuple<int, int, QString>> setPieces;
+	for (auto&& n : blackPieces) {
+		setPieces.insert(std::tuple<int, int, QString>{n.first, n.second, tiles[n.first][n.second]->operator*() });
 	}
-	return checkmate;
+	for (auto&& n : whitePieces) {
+		setPieces.insert(std::tuple<int, int, QString>{n.first, n.second, tiles[n.first][n.second]->operator*() });
+	}
+	BoardState* b = new BoardState(setPieces, isBlackTurn, !(tiles[blackKingPos.first][blackKingPos.second]->piece()->getHasMoved()), !(tiles[whiteKingPos.first][whiteKingPos.second]->piece()->getHasMoved()));
+	boardStateLog.push_back(b);
 }
 
-std::vector<std::pair<int, int>> Board::checkValidMoves(int x, int y, bool blackTurnLocal) const
+void gameObjects::Board::changePromotionPiece(int x, bool isBlack)
+{
+	if (isBlack) {
+		blackProm = x;
+	}
+	else {
+		whiteProm = x;
+	}
+}
+
+std::vector<std::pair<int, int>> Board::checkValidMoves(int x, int y, bool blackTurnLocal, bool canCastle) const
 {
 	std::vector<std::pair<int, int>> possValidMoves = **(tiles[x][y]->piece());
 	std::vector<std::pair<int, int>> newValidMoves;
@@ -335,6 +412,36 @@ std::vector<std::pair<int, int>> Board::checkValidMoves(int x, int y, bool black
 						newValidMoves.push_back(n);
 					}
 				}
+				else if (n == nextEnPassant) {
+					newValidMoves.push_back(n);
+				}
+			}
+		}
+	}
+	//is king that can castle
+	else if (canCastle && (dynamic_cast<Roi*>(tiles[x][y]->piece()) != NULL) && (tiles[x][y]->piece()->getHasMoved() == false)) {
+		for (auto&& n : possValidMoves) {
+			if ((n.second - y) == 2) {
+				if ((y + 3) <= 7) {
+					if ((dynamic_cast<Tour*>(tiles[x][y + 3]->piece()) != NULL) && (tiles[x][y + 3]->piece()->isBlack() == tiles[x][y]->piece()->isBlack()) && tiles[x][y + 3]->piece()->getHasMoved() == false && (tiles[x][y + 1]->piece() == nullptr) && (tiles[x][y + 2]->piece() == nullptr) && !checkCheck(isBlackTurn)) {
+						newValidMoves.push_back(n);
+					}
+				}
+			}
+			else if ((n.second - y) == -2) {
+				if ((y - 4) >= 0) {
+					if ((dynamic_cast<Tour*>(tiles[x][y - 4]->piece()) != NULL) && (tiles[x][y - 4]->piece()->isBlack() == tiles[x][y]->piece()->isBlack()) && tiles[x][y - 4]->piece()->getHasMoved() == false && (tiles[x][y - 1]->piece() == nullptr) && (tiles[x][y - 2]->piece() == nullptr) && (tiles[x][y - 3]->piece() == nullptr) && !checkCheck(isBlackTurn)) {
+						newValidMoves.push_back(n);
+					}
+				}
+			}
+			else if (tiles[n.first][n.second]->piece() == nullptr) {
+				newValidMoves.push_back(n);
+			}
+			else {
+				if (tiles[n.first][n.second]->piece()->isBlack() != blackTurnLocal) {
+					newValidMoves.push_back(n);
+				}
 			}
 		}
 	}
@@ -352,6 +459,19 @@ std::vector<std::pair<int, int>> Board::checkValidMoves(int x, int y, bool black
 		}
 	}
 	return newValidMoves;
+}
+
+bool gameObjects::Board::threeSameStates()
+{
+	int equalsCounter = 0;
+	BoardState b = *(boardStateLog.back());
+	for (auto it = boardStateLog.begin(); it != (boardStateLog.end() - 1); it++) {
+		BoardState a = **it;
+		if (a.operator==(b)) {
+			equalsCounter++;
+		}
+	}
+	return (equalsCounter >= 3);
 }
 
 void Board::initDefaultBoard()
@@ -435,6 +555,49 @@ void Board::initDefaultBoard()
 	addPiece(1, 2, p6w);
 	addPiece(1, 1, p7w);
 	addPiece(1, 0, p8w);
+}
+
+void gameObjects::Board::promote(int x, int y)
+{
+	gameObjects::Piece* todelete = tiles[x][y]->piece();
+	tiles[x][y]->removePiece();
+	delete todelete;
+	if (isBlackTurn) {
+		if (blackProm == 0) {
+			Reine* q = new Reine(isBlackTurn);
+			addPiece(x, y, q);
+		}
+		else if (blackProm == 1) {
+			Fou* f = new Fou(isBlackTurn);
+			addPiece(x, y, f);
+		}
+		else if (blackProm == 2) {
+			Tour* t = new Tour(isBlackTurn);
+			addPiece(x, y, t);
+		}
+		else {
+			Chevalier* c = new Chevalier(isBlackTurn);
+			addPiece(x, y, c);
+		}
+	}
+	else {
+		if (whiteProm == 0) {
+			Reine* q = new Reine(isBlackTurn);
+			addPiece(x, y, q);
+		}
+		else if (whiteProm == 1) {
+			Fou* f = new Fou(isBlackTurn);
+			addPiece(x, y, f);
+		}
+		else if (whiteProm == 2) {
+			Tour* t = new Tour(isBlackTurn);
+			addPiece(x, y, t);
+		}
+		else {
+			Chevalier* c = new Chevalier(isBlackTurn);
+			addPiece(x, y, c);
+		}
+	}
 }
 
 bool gameObjects::Board::miseEnEchec(int x, int y, std::pair<int, int> validMove)

@@ -10,8 +10,8 @@ gameObjects::Roi::Roi(bool isBlack, bool isTemp) : Piece(std::vector<std::pair<i
 	{ -1,1 },
 	{ -1,0 },
 	{ -1,-1 },
-	//{ 0,2 }, //castling (index 8)
-	//{ 0,-2 } //castling (index 9)
+	{ 0,2 }, //castling (index 8)
+	{ 0,-2 } //castling (index 9)
 }
 , false, isBlack, (QString)"R"), isTemp_(isTemp)
 {
@@ -32,11 +32,11 @@ Roi::~Roi() {
 	}
 }
 
-//void gameObjects::Roi::playerMove()
-//{
-//	if (Piece::getHasMoved() == false) {
-//		Piece::removePossMoves(8);
-//		Piece::removePossMoves(9);
-//	}
-//	Piece::playerMove();
-//}
+void gameObjects::Roi::playerMove()
+{
+	if (Piece::getHasMoved() == false) {
+		Piece::removePossMoves(9);
+		Piece::removePossMoves(8);
+	}
+	Piece::playerMove();
+}

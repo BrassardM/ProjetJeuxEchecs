@@ -7,7 +7,7 @@ namespace gameObjects {
 	public:
 		Roi(bool isBlack, bool isTemp = false);
 		virtual ~Roi();
-		//void playerMove() override;
+		void playerMove() override;
 	private:
 		inline static int nRois = 0;
 		bool isTemp_ = false;

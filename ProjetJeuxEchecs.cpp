@@ -59,11 +59,13 @@ void gameInterface::ProjetJeuxEchecs::onClick(int x, int y) {
         }
     }
     else {
-        ui->testmove->setChecked(false);
-        board->addPiece(x, y, pieceSelection);
-        drawBoard(); //also removes piece
-        pieceSelection = nullptr;
-        ui->currentselection->setText("Effacer");
+        if ((dynamic_cast<Pion*>(pieceSelection) == NULL) || (x != 0 && x != 7)) {
+            ui->testmove->setChecked(false);
+            board->addPiece(x, y, pieceSelection);
+            drawBoard();
+            pieceSelection = nullptr;
+            ui->currentselection->setText("Effacer");
+        }
     }
 }
 
@@ -84,7 +86,7 @@ void gameInterface::ProjetJeuxEchecs::drawBoard() const
     if (board->getBlackTurn()) {
         turn = (QString)"Tour des noirs";
         if (board->checkCheck(board->getBlackTurn())) {
-            if (board->checkCheckmate()) {
+            if (board->getState()) {
                 check = (QString)"Blanc Gagne";
             }
             else {
@@ -92,15 +94,15 @@ void gameInterface::ProjetJeuxEchecs::drawBoard() const
             }
         }
         else {
-            if (board->checkStalemate()) {
-                check = (QString)"Impasse N";
+            if (board->getState()) {
+                check = (QString)"Impasse";
             }
         }
     }
     else {
         turn = (QString)"Tour des blancs";
         if (board->checkCheck(board->getBlackTurn())) {
-            if (board->checkCheckmate()) {
+            if (board->getState()) {
                 check = (QString)"Noir Gagne";
             }
             else {
@@ -108,8 +110,8 @@ void gameInterface::ProjetJeuxEchecs::drawBoard() const
             }
         }
         else {
-            if (board->checkStalemate()) {
-                check = (QString)"Impasse B";
+            if (board->getState()) {
+                check = (QString)"Impasse";
             }
         }
     }
@@ -175,6 +177,16 @@ void gameInterface::ProjetJeuxEchecs::addFou()
         }
         ui->currentselection->setText(text);
     }
+    else {
+        if (ui->black->isChecked()) {
+            board->changePromotionPiece(1, ui->black->isChecked());
+            ui->blackProm->setText("Fou");
+        }
+        else {
+            board->changePromotionPiece(1, ui->black->isChecked());
+            ui->whiteProm->setText("Fou");
+        }
+    }
 }
 
 void gameInterface::ProjetJeuxEchecs::addChev()
@@ -187,6 +199,16 @@ void gameInterface::ProjetJeuxEchecs::addChev()
             text = text + (QString)" Noir";
         }
         ui->currentselection->setText(text);
+    }
+    else {
+        if (ui->black->isChecked()) {
+            board->changePromotionPiece(3, ui->black->isChecked());
+            ui->blackProm->setText("Chevalier");
+        }
+        else {
+            board->changePromotionPiece(3, ui->black->isChecked());
+            ui->whiteProm->setText("Chevalier");
+        }
     }
 }
 
@@ -201,6 +223,16 @@ void gameInterface::ProjetJeuxEchecs::addReine()
         }
         ui->currentselection->setText(text);
     }
+    else {
+        if (ui->black->isChecked()) {
+            board->changePromotionPiece(0, ui->black->isChecked());
+            ui->blackProm->setText("Reine");
+        }
+        else {
+            board->changePromotionPiece(0, ui->black->isChecked());
+            ui->whiteProm->setText("Reine");
+        }
+    }
 }
 
 void gameInterface::ProjetJeuxEchecs::addTour()
@@ -213,6 +245,16 @@ void gameInterface::ProjetJeuxEchecs::addTour()
             text = text + (QString)" Noir";
         }
         ui->currentselection->setText(text);
+    }
+    else {
+        if (ui->black->isChecked()) {
+            board->changePromotionPiece(2, ui->black->isChecked());
+            ui->blackProm->setText("Tour");
+        }
+        else {
+            board->changePromotionPiece(2, ui->black->isChecked());
+            ui->whiteProm->setText("Tour");
+        }
     }
 }
 
