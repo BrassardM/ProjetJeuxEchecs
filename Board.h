@@ -1,5 +1,6 @@
 #include "Tile.h"
 #include "BoardState.h"
+#include "LogMoves.h"
 #include <utility>
 #include <set>
 
@@ -10,6 +11,15 @@ namespace gameObjects {
 		Board();
 		~Board();
 		Board(const Board& other);
+
+		//pour les tests
+		void playSequence(const std::vector<std::tuple<int, int,int,int>>& sequence);
+		LogMoves& returnSequence(); // debug
+		int nPieces() const; // test en passant
+		bool checkCheckmate() const; // test checkmate & test promotion
+		bool checkStalemate() const; // test promotion and all stalemate combinations
+		bool checkInCheck() const; // test if in check
+		bool checkKingPos(int x, int y); // test towering
 
 		void displayPiece(int x, int y, gameObjects::Piece* piece);
 		bool getBlackTurn() const;
@@ -27,6 +37,7 @@ namespace gameObjects {
 
 	private:
 		std::vector<std::pair<int, int>> checkValidMoves(int x, int y, bool blackTurnLocal, bool canCastle = false) const;
+		bool insufficientmaterial();
 		bool threeSameStates();
 		void initDefaultBoard();
 		void promote(int x, int y);
@@ -44,6 +55,9 @@ namespace gameObjects {
 		bool gameover = false;
 		int sincelasttaken = 0;
 		std::pair<int, int> nextEnPassant = {-1,-1};
+
+		//pour les tests
+		LogMoves logMoves = {}; // only defaultreset (enough for all tests)
 		
 		int whiteProm = 0;
 		int blackProm = 0;

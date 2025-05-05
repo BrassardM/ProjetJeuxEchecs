@@ -9,7 +9,8 @@ namespace gameObjects {
 		virtual ~Roi();
 		void playerMove() override;
 	private:
-		inline static int nRois = 0;
+		inline static int nRoisBlack = 0;
+		inline static int nRoisWhite = 0;
 		bool isTemp_ = false;
 	};
 }

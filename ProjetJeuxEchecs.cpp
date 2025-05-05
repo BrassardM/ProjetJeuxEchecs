@@ -10,7 +10,7 @@
 
 using namespace gameObjects;
 
-gameInterface::ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget *parent)
+gameInterface::ProjetJeuxEchecs::ProjetJeuxEchecs(bool debugMode, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ProjetJeuxEchecsClass())
 {
@@ -38,6 +38,15 @@ gameInterface::ProjetJeuxEchecs::ProjetJeuxEchecs(QWidget *parent)
     connect(ui->adddel, &QPushButton::clicked, this, [&] { addDelete(); });
     connect(ui->reinit, &QPushButton::clicked, this, [&] { reinit(); });
 
+    if (debugMode) {
+        ui->debugReturnSeq->setEnabled(true);
+        ui->debugReturnSeqVal->setEnabled(true);
+        connect(ui->debugReturnSeq, &QPushButton::clicked, this, [&] { returnSeq(); });
+    }
+    else {
+        ui->debugReturnSeq->hide();
+        ui->debugReturnSeqVal->hide();
+    }
 
     drawBoard();
 }
@@ -59,7 +68,7 @@ void gameInterface::ProjetJeuxEchecs::onClick(int x, int y) {
         }
     }
     else {
-        if ((dynamic_cast<Pion*>(pieceSelection) == NULL) || (x != 0 && x != 7)) {
+        if (((dynamic_cast<Pion*>(pieceSelection) == NULL) || (x != 0 && x != 7))&&((dynamic_cast<Roi*>(pieceSelection) == NULL)||(x == 0 || x == 7))) {
             ui->testmove->setChecked(false);
             board->addPiece(x, y, pieceSelection);
             drawBoard();
@@ -290,4 +299,9 @@ void gameInterface::ProjetJeuxEchecs::addDelete()
 void gameInterface::ProjetJeuxEchecs::reinit()
 {
     drawBoard();
+}
+
+void gameInterface::ProjetJeuxEchecs::returnSeq()
+{
+    ui->debugReturnSeqVal->setPlainText(*(board->returnSequence()));
 }

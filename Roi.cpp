@@ -15,20 +15,29 @@ gameObjects::Roi::Roi(bool isBlack, bool isTemp) : Piece(std::vector<std::pair<i
 }
 , false, isBlack, (QString)"R"), isTemp_(isTemp)
 {
-	if (isTemp == true) {
-		nRois;
+	if (isBlack) {
+		nRoisBlack++;
+		if (nRoisBlack > 1) {
+			nRoisBlack--;
+			throw errors::tooManyKings("Plus de 1 roi noir!");
+		} 
 	}
 	else {
-		nRois++;
-		if (nRois > 2) {
-			nRois--;
-			throw errors::tooManyKings("Plus de 2 rois!");
-		} //change error to affect GUI
+		nRoisWhite++;
+		if (nRoisWhite > 1) {
+			nRoisWhite--;
+			throw errors::tooManyKings("Plus de 1 roi blanc!");
+		}
 	}
 }
 Roi::~Roi() {
 	if (!isTemp_) {
-		nRois = nRois - 1;
+		if (isBlack()) {
+			nRoisBlack--;
+		}
+		else {
+			nRoisWhite--;
+		}
 	}
 }
 

@@ -60,6 +60,50 @@ Board::Board(const Board& other) : pieceMoving(other.pieceMoving), movingPos(oth
 	}
 }
 
+void gameObjects::Board::playSequence(const std::vector<std::tuple<int, int, int, int>>& sequence)
+{
+	resetAttributes(true);
+	int blackPromBack = blackProm;
+	int whitePromBack = whiteProm;
+	for (auto&& n : sequence) {
+		blackProm = get<2>(n);
+		whiteProm = get<3>(n);
+		updateBoard(std::get<0>(n), std::get<1>(n));
+	}
+	blackProm = blackPromBack;
+	whiteProm = whitePromBack;
+}
+
+LogMoves& gameObjects::Board::returnSequence()
+{
+	return logMoves;
+}
+
+int gameObjects::Board::nPieces() const
+{
+	return (int)blackPieces.size() + (int)whitePieces.size();
+}
+
+bool gameObjects::Board::checkCheckmate() const
+{
+	return checkCheck(isBlackTurn) && gameover;
+}
+
+bool gameObjects::Board::checkStalemate() const
+{
+	return !checkCheck(isBlackTurn) && gameover;
+}
+
+bool gameObjects::Board::checkInCheck() const
+{
+	return checkCheck(isBlackTurn);
+}
+
+bool gameObjects::Board::checkKingPos(int x, int y)
+{
+	return (std::pair<int,int>(x,y) == blackKingPos || std::pair<int, int>(x, y) == whiteKingPos);
+}
+
 bool Board::getBlackTurn() const
 {
 	return isBlackTurn;
@@ -80,6 +124,7 @@ void Board::resetAttributes(bool defaultreset)
 	whitePieces = {};
 	gameover = false;
 	sincelasttaken = 0;
+	logMoves = {};
 
 	for (auto&& n : boardStateLog) {
 		delete n;
@@ -192,6 +237,12 @@ void Board::updateBoard(int x, int y)
 				sincelasttaken++;
 				logBoardState();
 				checkGame();
+				
+				//pour faire les tests
+				std::tuple<int, int, int, int> log = { movingPos.first, movingPos.second, blackProm, whiteProm};
+				logMoves += log;
+				std::tuple<int, int, int, int> log2 = { x, y, blackProm, whiteProm };
+				logMoves += log2;
 			}
 
 			for (auto&& n : validMovingPosList) {
@@ -326,7 +377,7 @@ void gameObjects::Board::checkGame()
 
 	if (blackKingPos != std::pair<int,int>{-1,-1} || whiteKingPos != std::pair<int, int>{-1, -1}) {
 		if (!threeSameStates()) {
-			if (whitePieces.size() > 1 && blackPieces.size() > 1) {
+			if (!insufficientmaterial()) {
 				if (sincelasttaken < 100) { //50 move rule
 					if (isBlackTurn) {
 						for (auto&& n : blackPieces) {
@@ -473,6 +524,42 @@ std::vector<std::pair<int, int>> Board::checkValidMoves(int x, int y, bool black
 	return newValidMoves;
 }
 
+bool gameObjects::Board::insufficientmaterial()
+{
+	int nP{};
+
+	bool insufficientMatN = true;
+	for (auto&& n : blackPieces) {
+		if (dynamic_cast<Reine*>(tiles[n.first][n.second]->piece()) != NULL || dynamic_cast<Tour*>(tiles[n.first][n.second]->piece()) != NULL || dynamic_cast<Pion*>(tiles[n.first][n.second]->piece()) != NULL) {
+			insufficientMatN = false;
+			break;
+		}
+		else if (dynamic_cast<Fou*>(tiles[n.first][n.second]->piece()) != NULL || dynamic_cast<Chevalier*>(tiles[n.first][n.second]->piece()) != NULL) {
+			nP++;
+			if (nP > 1) {
+				insufficientMatN = false;
+			}
+		}
+	}
+
+	bool insufficientMatB = true;
+	nP = {};
+	for (auto&& n : whitePieces) {
+		if (dynamic_cast<Reine*>(tiles[n.first][n.second]->piece()) != NULL || dynamic_cast<Tour*>(tiles[n.first][n.second]->piece()) != NULL || dynamic_cast<Pion*>(tiles[n.first][n.second]->piece()) != NULL) {
+			insufficientMatB = false;
+			break;
+		}
+		else if (dynamic_cast<Fou*>(tiles[n.first][n.second]->piece()) != NULL || dynamic_cast<Chevalier*>(tiles[n.first][n.second]->piece()) != NULL) {
+			nP++;
+			if (nP > 1) {
+				insufficientMatB = false;
+				break;
+			}
+		}
+	}
+	return (insufficientMatN && insufficientMatB);
+}
+
 bool gameObjects::Board::threeSameStates()
 {
 	int equalsCounter = 0;
@@ -483,7 +570,7 @@ bool gameObjects::Board::threeSameStates()
 			equalsCounter++;
 		}
 	}
-	return (equalsCounter >= 3);
+	return (equalsCounter > 1);
 }
 
 void Board::initDefaultBoard()
@@ -648,7 +735,7 @@ bool gameObjects::Board::miseEnEchec(int x, int y, std::pair<int, int> validMove
 		}
 		displayPiece(validMove.first, validMove.second, replaced);
 	}
-	blackKingPos = blackKingPosBackup;
+	blackKingPos = blackKingPosBackup; 
 	whiteKingPos = whiteKingPosBackup;
 	return miseEnEchec;
 }

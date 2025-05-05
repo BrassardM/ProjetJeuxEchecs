@@ -104,6 +104,7 @@
     <ClCompile Include="BoardState.cpp" />
     <ClCompile Include="Chevalier.cpp" />
     <ClCompile Include="Fou.cpp" />
+    <ClCompile Include="LogMoves.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Pion.cpp" />
     <ClCompile Include="Reine.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="BoardState.h" />
     <ClInclude Include="Chevalier.h" />
     <ClInclude Include="Fou.h" />
+    <ClInclude Include="LogMoves.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="Pion.h" />
     <ClInclude Include="Reine.h" />

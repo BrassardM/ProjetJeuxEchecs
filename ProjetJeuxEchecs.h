@@ -14,7 +14,7 @@ namespace gameInterface {
         Q_OBJECT
 
     public:
-        ProjetJeuxEchecs(QWidget* parent = nullptr);
+        ProjetJeuxEchecs(bool debugMode = false, QWidget* parent = nullptr);
         ~ProjetJeuxEchecs();
 
     private:    
@@ -41,5 +41,8 @@ namespace gameInterface {
         void addPion();
         void addDelete();
         void reinit();
+        
+        //pourlestests
+        void returnSeq();
     };
 }
