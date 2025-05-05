@@ -158,6 +158,7 @@ void gameInterface::ProjetJeuxEchecs::addRoi()
                 text = text + (QString)" Black";
             }
             ui->currentselection->setText(text);
+            board->logBoardState(true);
         }
     }
     catch (errors::tooManyKings& e){
@@ -176,6 +177,7 @@ void gameInterface::ProjetJeuxEchecs::addFou()
             text = text + (QString)" Noir";
         }
         ui->currentselection->setText(text);
+        board->logBoardState(true);
     }
     else {
         if (ui->black->isChecked()) {
@@ -199,6 +201,7 @@ void gameInterface::ProjetJeuxEchecs::addChev()
             text = text + (QString)" Noir";
         }
         ui->currentselection->setText(text);
+        board->logBoardState(true);
     }
     else {
         if (ui->black->isChecked()) {
@@ -222,6 +225,7 @@ void gameInterface::ProjetJeuxEchecs::addReine()
             text = text + (QString)" Noir";
         }
         ui->currentselection->setText(text);
+        board->logBoardState(true);
     }
     else {
         if (ui->black->isChecked()) {
@@ -245,6 +249,7 @@ void gameInterface::ProjetJeuxEchecs::addTour()
             text = text + (QString)" Noir";
         }
         ui->currentselection->setText(text);
+        board->logBoardState(true);
     }
     else {
         if (ui->black->isChecked()) {
@@ -268,6 +273,7 @@ void gameInterface::ProjetJeuxEchecs::addPion()
             text = text + (QString)" Noir";
         }
         ui->currentselection->setText(text);
+        board->logBoardState(true);
     }
 }
 
@@ -277,6 +283,7 @@ void gameInterface::ProjetJeuxEchecs::addDelete()
         pieceSelection = nullptr;
         QString text = (QString)"Effacer";
         ui->currentselection->setText(text);
+        board->logBoardState(true);
     }
 }
 

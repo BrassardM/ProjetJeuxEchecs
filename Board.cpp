@@ -350,7 +350,7 @@ void gameObjects::Board::checkGame()
 	}
 }
 
-void gameObjects::Board::logBoardState()
+void gameObjects::Board::logBoardState(bool sameTurn)
 {
 	std::set<std::tuple<int, int, QString>> setPieces;
 	for (auto&& n : blackPieces) {
@@ -359,8 +359,20 @@ void gameObjects::Board::logBoardState()
 	for (auto&& n : whitePieces) {
 		setPieces.insert(std::tuple<int, int, QString>{n.first, n.second, tiles[n.first][n.second]->operator*() });
 	}
-	BoardState* b = new BoardState(setPieces, isBlackTurn, !(tiles[blackKingPos.first][blackKingPos.second]->piece()->getHasMoved()), !(tiles[whiteKingPos.first][whiteKingPos.second]->piece()->getHasMoved()));
-	boardStateLog.push_back(b);
+	BoardState* b;
+	if (blackKingPos == std::pair<int,int>(-1,-1) || whiteKingPos == std::pair<int, int>(-1, -1)) {
+		b = new BoardState(setPieces, isBlackTurn, false, false);
+	}
+	else {
+		b = new BoardState(setPieces, isBlackTurn, !(tiles[blackKingPos.first][blackKingPos.second]->piece()->getHasMoved()), !(tiles[whiteKingPos.first][whiteKingPos.second]->piece()->getHasMoved()));
+	}
+	if (sameTurn) {
+		boardStateLog.pop_back();
+		boardStateLog.push_back(b);
+	}
+	else {
+		boardStateLog.push_back(b);
+	}
 }
 
 void gameObjects::Board::changePromotionPiece(int x, bool isBlack)

@@ -22,7 +22,7 @@ namespace gameObjects {
 		std::vector<std::pair<int, QString>> operator*();
 		bool getState() const;
 		void checkGame();
-		void logBoardState();
+		void logBoardState(bool sameTurn = false);
 		void changePromotionPiece(int x, bool isBlack);
 
 	private:
