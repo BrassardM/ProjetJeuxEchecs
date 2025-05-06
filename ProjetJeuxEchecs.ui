@@ -1624,7 +1624,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Reinitializer</string>
+     <string>Enlever Test</string>
     </property>
    </widget>
    <widget class="QPushButton" name="addTour">

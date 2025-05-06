@@ -134,7 +134,7 @@
     <ClInclude Include="Roi.h" />
     <ClInclude Include="TempMove.h" />
     <ClInclude Include="Tile.h" />
-    <ClInclude Include="tooManyKings.h" />
+    <ClInclude Include="TooManyKings.h" />
     <ClInclude Include="Tour.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

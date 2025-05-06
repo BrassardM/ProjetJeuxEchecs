@@ -111,7 +111,7 @@
     <ClInclude Include="Tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tooManyKings.h">
+    <ClInclude Include="TooManyKings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TempMove.h">

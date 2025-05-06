@@ -19,14 +19,14 @@ gameObjects::Roi::Roi(bool isBlack, bool isTemp) : Piece(std::vector<std::pair<i
 		nRoisBlack++;
 		if (nRoisBlack > 1) {
 			nRoisBlack--;
-			throw errors::tooManyKings("Plus de 1 roi noir!");
+			throw errors::TooManyKings("Plus de 1 roi noir!");
 		} 
 	}
 	else {
 		nRoisWhite++;
 		if (nRoisWhite > 1) {
 			nRoisWhite--;
-			throw errors::tooManyKings("Plus de 1 roi blanc!");
+			throw errors::TooManyKings("Plus de 1 roi blanc!");
 		}
 	}
 }

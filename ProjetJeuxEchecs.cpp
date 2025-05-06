@@ -170,7 +170,7 @@ void gameInterface::ProjetJeuxEchecs::addRoi()
             board->logBoardState(true);
         }
     }
-    catch (errors::tooManyKings& e){
+    catch (errors::TooManyKings& e){
         QMessageBox messagebox;
         messagebox.critical(0, "Trop de Rois", e.what());
     }

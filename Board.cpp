@@ -438,10 +438,10 @@ void gameObjects::Board::changePromotionPiece(int x, bool isBlack)
 
 std::vector<std::pair<int, int>> Board::checkValidMoves(int x, int y, bool blackTurnLocal, bool canCastle) const
 {
-	std::vector<std::pair<int, int>> possValidMoves = **(tiles[x][y]->piece());
+	std::vector<std::pair<int, int>> possValidMoves = (tiles[x][y]->piece()->returnMoves());
 	std::vector<std::pair<int, int>> newValidMoves;
-	//needs LOS
-	if (tiles[x][y]->piece()->needsLOS()) {
+	//movesStraight
+	if (tiles[x][y]->piece()->getStraight()) {
 		bool hasLOS = true;
 		for (auto&& n : possValidMoves) {
 			if (abs(x - n.first) <= 1 && abs(y - n.second) <= 1) {

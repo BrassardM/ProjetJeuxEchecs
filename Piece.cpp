@@ -37,7 +37,7 @@ bool gameObjects::Piece::isBlack()
 	return isBlack_;
 }
 
-std::vector<std::pair<int, int>> Piece::operator*() const {
+std::vector<std::pair<int, int>> Piece::returnMoves() const {
 	std::vector<std::pair<int, int>> outVect;
 	for (auto&& n : movesPattern_) {
 		bool contained = false;
@@ -62,7 +62,7 @@ std::vector<std::pair<int, int>> Piece::operator*() const {
 	return outVect;
 };
 
-bool Piece::needsLOS() {
+bool Piece::getStraight() const {
 	return movesStraight_;
 }
 

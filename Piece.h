@@ -13,9 +13,9 @@ namespace gameObjects {
 		void movePos(int x, int y);
 		virtual void playerMove();
 		bool isBlack();
-		bool needsLOS();
+		bool getStraight() const;
 		virtual ~Piece();
-		std::vector<std::pair<int, int>> operator*() const;
+		std::vector<std::pair<int, int>> returnMoves() const;
 		const QString text;
 		bool getHasMoved() const;
 	protected:
