@@ -475,7 +475,12 @@ std::vector<std::pair<int, int>> Echequier::checkValidMoves(int x, int y, bool b
 	else if (dynamic_cast<Pion*>(tiles_[x][y]->piece()) != NULL) {
 		for (auto&& n : possValidMoves) {
 			if ((abs(n.first - x) - abs(n.second - y)) != 0) {
-				if (tiles_[n.first][n.second]->piece() == nullptr) {
+				if (abs(n.first - x) == 2) {
+					if ((tiles_[x + (1-2*((int)tiles_[x][y]->piece()->isBlack()))][n.second]->piece() == nullptr) && (tiles_[n.first][n.second]->piece() == nullptr)) {
+						newValidMoves.push_back(n);
+					}
+				}
+				else if (tiles_[n.first][n.second]->piece() == nullptr) {
 					newValidMoves.push_back(n);
 				}
 			}
