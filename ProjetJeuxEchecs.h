@@ -2,11 +2,20 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_ProjetJeuxEchecs.h"
-#include "Board.h"
+#include "Echequier.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ProjetJeuxEchecsClass; };
 QT_END_NAMESPACE
+
+/**
+* Entête pour le module de l'interaction entre l'interface graphique et le modèle. Fait partie de la vue.
+*
+* \file   Echequier.h
+* \author Jiaqi Zhao et Matthew Brassard
+* \date   6 mai 2025
+* Créé le 10 avril 2025
+*/
 
 namespace gameInterface {
     class ProjetJeuxEchecs : public QMainWindow
@@ -21,7 +30,7 @@ namespace gameInterface {
         void cancelPieceSelection();
         QPushButton* pushButtonCoords[8][8];
         Ui::ProjetJeuxEchecsClass* ui;
-        gameObjects::Board* board;
+        gameObjects::Echequier* board;
         bool creativemode = false;
         gameObjects::Piece* pieceSelection = nullptr;
         void drawBoard() const;

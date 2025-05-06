@@ -15,6 +15,16 @@
 #include "ProjetJeuxEchecs.h"
 #include <QtWidgets/QApplication>
 
+/**
+* Le fichier main qui est le module principal.
+*
+* \file   Echequier.h
+* \author Jiaqi Zhao et Matthew Brassard
+* \date   6 mai 2025
+* Créé le 10 avril 2025
+*/
+
+
 #if __has_include("bibliotheque_cours.hpp")
 #include "bibliotheque_cours.hpp"
 #define BIBLIOTHEQUE_COURS_INCLUS

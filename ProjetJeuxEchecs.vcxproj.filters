@@ -70,10 +70,10 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Board.cpp">
+    <ClCompile Include="Echequier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TempMove.cpp">
+    <ClCompile Include="MouvementTemporaire.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Reine.cpp">
@@ -85,10 +85,10 @@
     <ClCompile Include="Pion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BoardState.cpp">
+    <ClCompile Include="EtatEchequier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LogMoves.cpp">
+    <ClCompile Include="HistoriqueMouvements.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -105,16 +105,16 @@
     <ClInclude Include="Chevalier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Board.h">
+    <ClInclude Include="Echequier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TooManyKings.h">
+    <ClInclude Include="TropDeRois.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TempMove.h">
+    <ClInclude Include="MouvementTemporaire.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Reine.h">
@@ -126,10 +126,10 @@
     <ClInclude Include="Pion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BoardState.h">
+    <ClInclude Include="EtatEchequier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LogMoves.h">
+    <ClInclude Include="HistoriqueMouvements.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,15 @@
 #include "Roi.h"
 
+/**
+* Module pour le roi. Fait partie du modèle.
+*
+* \file   Echequier.h
+* \author Jiaqi Zhao et Matthew Brassard
+* \date   6 mai 2025
+* Créé le 10 avril 2025
+*/
+
+
 using namespace gameObjects;
 gameObjects::Roi::Roi(bool isBlack, bool isTemp) : Piece(std::vector<std::pair<int, int>>{
 	{1, 1},
@@ -19,14 +29,14 @@ gameObjects::Roi::Roi(bool isBlack, bool isTemp) : Piece(std::vector<std::pair<i
 		nRoisBlack++;
 		if (nRoisBlack > 1) {
 			nRoisBlack--;
-			throw errors::TooManyKings("Plus de 1 roi noir!");
+			throw errors::TropDeRois("Plus de 1 roi noir!");
 		} 
 	}
 	else {
 		nRoisWhite++;
 		if (nRoisWhite > 1) {
 			nRoisWhite--;
-			throw errors::TooManyKings("Plus de 1 roi blanc!");
+			throw errors::TropDeRois("Plus de 1 roi blanc!");
 		}
 	}
 }

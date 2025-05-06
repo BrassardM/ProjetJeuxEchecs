@@ -6,7 +6,16 @@
 #include "Tour.h"
 #include "Reine.h"
 #include <QMessageBox>
-#include "TempMove.h"
+#include "MouvementTemporaire.h"
+
+/**
+* Module de l'interaction modèle-vue. Fait partie de la vue.
+*
+* \file   Echequier.h
+* \author Jiaqi Zhao et Matthew Brassard
+* \date   6 mai 2025
+* Créé le 10 avril 2025
+*/
 
 using namespace gameObjects;
 
@@ -14,12 +23,12 @@ gameInterface::ProjetJeuxEchecs::ProjetJeuxEchecs(bool debugMode, QWidget *paren
     : QMainWindow(parent)
     , ui(new Ui::ProjetJeuxEchecsClass())
 {
-    Board* pboard = new Board;
+    Echequier* pboard = new Echequier;
     board = pboard;
     ui->setupUi(this);
     ui->turn->setText((QString)"Tour des blancs");
-    for (int y{}; y < 8; y++) {
-        for (int x{}; x < 8; x++){
+    for (int y{}; y < DIMENSION_ECHEQUIER; y++) {
+        for (int x{}; x < DIMENSION_ECHEQUIER; x++){
             QPushButton* currbutton = findChild<QPushButton*>((QString)((char)(72-x)) + (QString)'_' + (QString)QString::number(y+1));
             pushButtonCoords[x][y] = currbutton;
             if (currbutton)
@@ -88,7 +97,7 @@ gameInterface::ProjetJeuxEchecs::~ProjetJeuxEchecs()
 void gameInterface::ProjetJeuxEchecs::drawBoard() const
 {
     for (auto&& n : board->operator*()) {
-        pushButtonCoords[n.first % 8][(n.first - n.first % 8) / 8]->setText(n.second);
+        pushButtonCoords[n.first % DIMENSION_ECHEQUIER][(n.first - n.first % DIMENSION_ECHEQUIER) / DIMENSION_ECHEQUIER]->setText(n.second);
     }
     QString turn;
     QString check = (QString)"Pas d'échec";
@@ -130,7 +139,7 @@ void gameInterface::ProjetJeuxEchecs::drawBoard() const
 
 void gameInterface::ProjetJeuxEchecs::tempmove(std::pair<int,int> originalPos, std::pair<int,int> movePos) const
 {
-    TempMove tm(originalPos,movePos,board);
+    MouvementTemporaire tm(originalPos,movePos,board);
     drawBoard();
 }
 
@@ -170,7 +179,7 @@ void gameInterface::ProjetJeuxEchecs::addRoi()
             board->logBoardState(true);
         }
     }
-    catch (errors::TooManyKings& e){
+    catch (errors::TropDeRois& e){
         QMessageBox messagebox;
         messagebox.critical(0, "Trop de Rois", e.what());
     }

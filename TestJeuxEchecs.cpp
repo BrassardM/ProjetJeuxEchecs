@@ -9,7 +9,7 @@
 
 #if __has_include("gtest/gtest.h")
 #include "gtest/gtest.h"
-#include "Board.h"
+#include "Echequier.h"
 #endif
 #ifdef TEST
 
@@ -24,7 +24,7 @@ TEST(Test, exempleDeTest2)
 }
 
 TEST(Test, capture) {
-	gameObjects::Board b;
+	gameObjects::Echequier b;
 	b.playSequence(std::vector<std::tuple<int, int, int, int>>{
 		{1, 4, 0, 0},
 		{ 3, 4, 0, 0 },
@@ -36,7 +36,7 @@ TEST(Test, capture) {
 }
 
 TEST(Test, echec) {
-	gameObjects::Board b;
+	gameObjects::Echequier b;
 	b.playSequence(std::vector<std::tuple<int, int, int, int>>{
 		{1, 4, 0, 0},
 		{ 2, 4, 0, 0 },
@@ -52,7 +52,7 @@ TEST(Test, echec) {
 }
 
 TEST(Test, enPassantTest) {
-	gameObjects::Board b;
+	gameObjects::Echequier b;
 	b.playSequence(std::vector<std::tuple<int, int, int, int>>{
 		{1, 4, 0, 0},
 		{ 3, 4, 0, 0 },
@@ -68,7 +68,7 @@ TEST(Test, enPassantTest) {
 }
 
 TEST(Test, checkMate1) {
-	gameObjects::Board b;
+	gameObjects::Echequier b;
 	b.playSequence(std::vector<std::tuple<int, int, int, int>>{
 		{1, 4, 0, 0},
 		{ 3, 4, 0, 0 },
@@ -108,7 +108,7 @@ TEST(Test, checkMate1) {
 }
 
 TEST(Test, checkMate2) { //test si en passant a marché
-	gameObjects::Board b;
+	gameObjects::Echequier b;
 	b.playSequence(std::vector<std::tuple<int, int, int, int>>{
 		{0, 1, 0, 0},
 		{ 2, 2, 0, 0 },
@@ -190,7 +190,7 @@ TEST(Test, checkMate2) { //test si en passant a marché
 }
 
 TEST(Test, checkmate3) {
-	gameObjects::Board b;
+	gameObjects::Echequier b;
 	b.playSequence(std::vector<std::tuple<int, int, int, int>>{
 		{1, 4, 0, 0},
 		{ 3, 4, 0, 0 },
@@ -212,7 +212,7 @@ TEST(Test, checkmate3) {
 }
 
 TEST(Test, threefoldRepetition) {
-	gameObjects::Board b;
+	gameObjects::Echequier b;
 	b.playSequence(std::vector<std::tuple<int, int, int, int>>{
 		{1, 4, 0, 0},
 		{ 3, 4, 0, 0 },
@@ -242,7 +242,7 @@ TEST(Test, threefoldRepetition) {
 }
 
 TEST(Test, fiftyMoveRule) {
-	gameObjects::Board b;
+	gameObjects::Echequier b;
 	b.playSequence(std::vector<std::tuple<int, int, int, int>>{
 		{1, 0, 0, 0},
 		{ 3, 0, 0, 0 },
@@ -448,7 +448,7 @@ TEST(Test, fiftyMoveRule) {
 }
 
 TEST(Test, insufficentMaterial) {
-	gameObjects::Board b;
+	gameObjects::Echequier b;
 	b.playSequence(std::vector<std::tuple<int, int, int, int>>{
 		{1, 4, 0, 0},
 		{ 3, 4, 0, 0 },
@@ -636,7 +636,7 @@ TEST(Test, insufficentMaterial) {
 }
 
 TEST(Test, testPromotion) {
-	gameObjects::Board b;
+	gameObjects::Echequier b;
 	b.playSequence(std::vector<std::tuple<int, int, int, int>>{
 		{1, 4, 0, 0},
 		{ 3, 4, 0, 0 },
@@ -688,7 +688,7 @@ TEST(Test, testPromotion) {
 }
 
 TEST(Test, towering) {
-	gameObjects::Board b;
+	gameObjects::Echequier b;
 	b.playSequence(std::vector<std::tuple<int, int, int, int>>{
 		{1, 4, 0, 0},
 		{ 2, 4, 0, 0 },
