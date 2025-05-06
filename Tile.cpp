@@ -3,44 +3,54 @@
 #include "Fou.h"
 #include "Chevalier.h"
 
+/**
+* Module pour une case de l'échéquier. Fait partie du modèle.
+*
+* \file   Echequier.h
+* \author Jiaqi Zhao et Matthew Brassard
+* \date   6 mai 2025
+* Créé le 10 avril 2025
+*/
+
+
 using namespace gameObjects;
 
-Tile::Tile(int xpos, int ypos) : xpos_(xpos), ypos_(ypos), currPiece(nullptr), currentText((QString)""), currentTextValid((QString)"")
+Tile::Tile(int xpos, int ypos) : xpos_(xpos), ypos_(ypos), currPiece_(nullptr), currentText_((QString)""), currentTextValid_((QString)"")
 {
 	
 }
 
-Tile::Tile(const Tile& other) : xpos_(other.xpos_), ypos_(other.ypos_), currPiece(nullptr), currentText(other.currentText), currentTextValid(other.currentTextValid), valid_(other.valid_)
+Tile::Tile(const Tile& other) : xpos_(other.xpos_), ypos_(other.ypos_), currPiece_(nullptr), currentText_(other.currentText_), currentTextValid_(other.currentTextValid_), valid_(other.valid_)
 {
 }
 
 void Tile::movePiece(gameObjects::Piece* movePiece)
 {
-	assert(currPiece == nullptr);
-	currPiece = movePiece;
-	currentText = currPiece->text;
-	if (currPiece->isBlack()) {
-		currentText += (QString)" N";
+	assert(currPiece_ == nullptr);
+	currPiece_ = movePiece;
+	currentText_ = currPiece_->text;
+	if (currPiece_->isBlack()) {
+		currentText_ += (QString)" N";
 	}
-	currentTextValid = currentText;
-	currPiece->movePos(xpos_, ypos_);
+	currentTextValid_ = currentText_;
+	currPiece_->movePos(xpos_, ypos_);
 }
 
 void Tile::removePiece()
 {
-	currPiece = nullptr;
-	currentText = (QString)"";
+	currPiece_ = nullptr;
+	currentText_ = (QString)"";
 	if (valid_) {
-		currentTextValid = currentText + (QString)"[V]";
+		currentTextValid_ = currentText_ + (QString)"[V]";
 	}
 	else {
-		currentTextValid = currentText;
+		currentTextValid_ = currentText_;
 	}
 }
 
 gameObjects::Piece* Tile::piece()
 {
-	return currPiece;
+	return currPiece_;
 }
 
 bool Tile::isRoi()
@@ -57,13 +67,13 @@ void Tile::addValid()
 {
 	valid_ = true;
 
-	currentTextValid = currentText + (QString)"[V]";
+	currentTextValid_ = currentText_ + (QString)"[V]";
 }
 
 void Tile::removeValid()
 {
 	valid_ = false;
-	currentTextValid = currentText;
+	currentTextValid_ = currentText_;
 }
 
 bool Tile::isValidMove() const
@@ -73,5 +83,5 @@ bool Tile::isValidMove() const
 
 QString Tile::operator*() const
 {
-	return currentTextValid;
+	return currentTextValid_;
 }

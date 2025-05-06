@@ -3,6 +3,15 @@
 #include <vector>
 #include <QString>
 
+/**
+* Entête pour le module représentant une pièce d'échecs. Fait partie du modèle.
+*
+* \file   Echequier.h
+* \author Jiaqi Zhao et Matthew Brassard
+* \date   6 mai 2025
+* Créé le 10 avril 2025
+*/
+
 namespace gameObjects {
 	class Piece
 	{
@@ -25,6 +34,6 @@ namespace gameObjects {
 		std::vector<std::pair<int, int>> movesPattern_;
 		bool movesStraight_ = 0;
 		const bool isBlack_;
-		bool hasMoved = false;
+		bool hasMoved_ = false;
 	};
 }

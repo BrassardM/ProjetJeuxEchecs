@@ -1,5 +1,15 @@
 #include "Piece.h"
 
+/**
+* Module d'une pièce. Fait partie du modèle.
+*
+* \file   Echequier.h
+* \author Jiaqi Zhao et Matthew Brassard
+* \date   6 mai 2025
+* Créé le 10 avril 2025
+*/
+
+
 using namespace gameObjects;
 
 Piece::Piece() : pos_(0, 0), movesPattern_(), movesStraight_(0), isBlack_(false), text(){
@@ -19,7 +29,7 @@ void Piece::movePos(int x, int y) {
 
 void gameObjects::Piece::playerMove()
 {
-	hasMoved = true;
+	hasMoved_ = true;
 }
 
 void gameObjects::Piece::removePossMoves(int i)
@@ -29,7 +39,7 @@ void gameObjects::Piece::removePossMoves(int i)
 
 bool gameObjects::Piece::getHasMoved() const
 {
-	return hasMoved;
+	return hasMoved_;
 }
 
 bool gameObjects::Piece::isBlack()
